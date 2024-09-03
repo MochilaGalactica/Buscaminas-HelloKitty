@@ -1,0 +1,11 @@
+Fase 1
+Definición y construcción de todas las clases necesarias para la lógica de la app.
+
+Fase 2
+Métodos y funciones necesarias para que funcione el juego (Generar minas en el tablero, comprobar minas alrededor, descubrir casilla, etc)
+
+Fase 3
+Desarrolar frame con matriz de botones vinculado al tablero con todos los eventos necesarios para jugar
+
+Fase 4
+Menús para iniciar partida, cambiar tamaño de tablero y personalizar todo de rosa y de la hello kitty
