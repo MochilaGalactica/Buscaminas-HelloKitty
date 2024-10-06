@@ -6,11 +6,15 @@ public class Casilla {
 	private int y;
 	
 	private boolean mina;
+	private boolean abierta;
+	private boolean bandera;
 	
 	public Casilla(int x, int y) {
 		this.x = x;
 		this.y = y;
 		this.mina = false;
+		this.abierta = false;
+		this.bandera = false;
 	}
 
 	public int getX() {
@@ -32,13 +36,26 @@ public class Casilla {
 	public boolean isMina() {
 		return mina;
 	}
-
-	public void setMina(boolean mina) {
-		this.mina = mina;
+	
+	public boolean isAbierta() {
+		return abierta;
+	}
+	
+	public boolean isBandera() {
+		return bandera;
 	}
 	
 	public void colocarMina() {
 		this.mina = true;
 	}
+	
+	public void abrirCasilla() {
+		this.abierta = true;
+	}
+
+	public void setBandera(boolean bandera) {
+		this.bandera = bandera;
+	}
+	
 	
 }
