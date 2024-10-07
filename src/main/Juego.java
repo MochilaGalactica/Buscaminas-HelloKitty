@@ -166,12 +166,14 @@ public class Juego extends JFrame {
 	}
 	
 	private void colocarBandera(Casilla casilla) {
-		if(casilla.isBandera()) {
-			casilla.setBandera(false);
-			botonesTablero[casilla.getX()][casilla.getY()].setText("");
-		}else {
-			casilla.setBandera(true);
-			botonesTablero[casilla.getX()][casilla.getY()].setText("V");
+		if(!casilla.isAbierta()) {
+			if(casilla.isBandera()) {
+				casilla.setBandera(false);
+				botonesTablero[casilla.getX()][casilla.getY()].setText("");
+			}else {
+				casilla.setBandera(true);
+				botonesTablero[casilla.getX()][casilla.getY()].setText("V");
+			}
 		}
 		
 	}
