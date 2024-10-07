@@ -77,6 +77,8 @@ public class Juego extends JFrame {
 	
 	private void cargarControles() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Buscaminas de la Hello Kitty");
+		setIconImage(new ImageIcon("resources/hellokitty.png").getImage());
 		setBounds(100, 100, 450, 600);
 		setResizable(false);
 		contentPane = new JPanel();
