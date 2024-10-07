@@ -13,6 +13,8 @@ import entity.Casilla;
 import entity.Tablero;
 
 import java.awt.GridLayout;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -31,6 +33,11 @@ public class Juego extends JFrame {
 	private JButton[][] botonesTablero;
 	
 	private Tablero tableroMinas;
+	
+	private ImageIcon mainIconoNormal;
+    private ImageIcon mainIconoHover;
+    private ImageIcon mainIconoVictoria;
+    private ImageIcon mainIconoGameOver;
 	
 	private int numFilas = 9;
 	private int numColumnas = 9;
@@ -71,6 +78,7 @@ public class Juego extends JFrame {
 	private void cargarControles() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 600);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -83,13 +91,26 @@ public class Juego extends JFrame {
 		contentPane.add(cabecera);
 		cabecera.setLayout(null);
 		
-		mainButton = new JButton("Botonaco");
-		mainButton.setBounds(161, 37, 89, 23);
+		mainButton = new JButton();
+		mainButton.setBounds(161, 23, 89, 55);
+		mainButton.setText(null);  // No mostrar texto
+		mainButton.setBorderPainted(false);  // No mostrar borde
+		mainButton.setContentAreaFilled(false);  // No pintar el área de contenido
+		mainButton.setFocusPainted(false);  // No mostrar el foco
+		mainButton.setOpaque(false);  // No hacer el botón opaco
+		
+		mainIconoNormal = new ImageIcon("resources/hellokitty_mini.png");
+		mainIconoHover = new ImageIcon("resources/hellokitty_hover.png");
+		mainIconoGameOver = new ImageIcon("resources/hellokitty_muerta.png");
+		mainIconoVictoria = new ImageIcon("resources/hellokitty_victoria.png");
+		
+		// Hacer click en el botón
 		mainButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mainButtonClick();
 			}
 		});
+		
 		cabecera.add(mainButton);
 		
 		// Tablero
@@ -109,11 +130,27 @@ public class Juego extends JFrame {
 	}
 	
 	private void reiniciarTablero() {
+		mainButton.setIcon(new ImageIcon("resources/hellokitty_mini.png"));
+		
+		// Agregar un MouseListener para cambiar el icono al pasar el ratón
+		mainButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            	mainButton.setIcon(mainIconoHover);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	mainButton.setIcon(mainIconoNormal);
+            }
+        });
+		
 		for(int i = 0; i < botonesTablero.length; i++) {
 			for(int j = 0; j < botonesTablero[i].length; j++) {
 				botonesTablero[i][j].setEnabled(true);
 				botonesTablero[i][j].setText("");
 				botonesTablero[i][j].setBackground(getBackground());
+				botonesTablero[i][j].setIcon(null);
 				
 				final int x = i;
                 final int y = j;
@@ -153,7 +190,6 @@ public class Juego extends JFrame {
 		
 		if(casilla.isMina()) {
 			boton.setBackground(new Color(255, 0, 0));
-			mostrarMinas();
 			gameOver();
 		}else {
 			abrirCasillasAlrededor(casilla);
@@ -169,10 +205,10 @@ public class Juego extends JFrame {
 		if(!casilla.isAbierta()) {
 			if(casilla.isBandera()) {
 				casilla.setBandera(false);
-				botonesTablero[casilla.getX()][casilla.getY()].setText("");
+				botonesTablero[casilla.getX()][casilla.getY()].setIcon(null);
 			}else {
 				casilla.setBandera(true);
-				botonesTablero[casilla.getX()][casilla.getY()].setText("V");
+				botonesTablero[casilla.getX()][casilla.getY()].setIcon(new ImageIcon("resources/corazon.png"));
 			}
 		}
 		
@@ -180,16 +216,34 @@ public class Juego extends JFrame {
 	
 	private void gameOver() {
 		bloquearBotones();
+		
+		mainButton.setIcon(mainIconoGameOver);
+		
+		mostrarMinas();
 		JOptionPane.showMessageDialog(null, "Has perdido =(");
 	}
 	
 	private void victoria() {
 		bloquearBotones();
+		
+		mainButton.setIcon(mainIconoVictoria);
+		
 		mostrarMinas();
 		JOptionPane.showMessageDialog(null, "Has ganado =)");
 	}
 	
 	private void bloquearBotones() {
+		
+		// Quitar eventos botón principal
+		for (MouseListener listener : mainButton.getMouseListeners()) {
+			if(listener instanceof BasicButtonListener) {
+				
+			}else {
+				mainButton.removeMouseListener(listener);
+			}
+        }
+		
+		// Quitar eventos botones tablero
 		for(int i = 0; i < botonesTablero.length; i++) {
 			for(int j = 0; j < botonesTablero[i].length; j++) {
 				for (ActionListener al : botonesTablero[i][j].getActionListeners()) {
@@ -211,7 +265,7 @@ public class Juego extends JFrame {
 		for(int i = 0; i < botonesTablero.length; i++) {
 			for(int j = 0; j < botonesTablero[i].length; j++) {
 				if(tableroMinas.getCasillas()[i][j].isMina()) {
-					botonesTablero[i][j].setText("B");
+					botonesTablero[i][j].setIcon(new ImageIcon("resources/fresa.png"));
 				}
 			}
 		}
@@ -222,6 +276,8 @@ public class Juego extends JFrame {
 			
 			casilla.abrirCasilla();
 			botonesTablero[casilla.getX()][casilla.getY()].setEnabled(false);
+			botonesTablero[casilla.getX()][casilla.getY()].setIcon(null);
+			botonesTablero[casilla.getX()][casilla.getY()].setBackground(null);
 			
 			int numMinasAlrededor = tableroMinas.detectarMinas(casilla);
 			
