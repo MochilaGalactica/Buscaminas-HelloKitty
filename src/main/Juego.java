@@ -1,7 +1,6 @@
 package main;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -14,6 +13,7 @@ import entity.Tablero;
 
 import java.awt.GridLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -28,6 +28,7 @@ public class Juego extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel cabecera;
+	private JPanel tableroLayout;
 	private JPanel tablero;
 	private JButton mainButton;
 	private JButton[][] botonesTablero;
@@ -39,32 +40,21 @@ public class Juego extends JFrame {
     private ImageIcon mainIconoVictoria;
     private ImageIcon mainIconoGameOver;
 	
-	private int numFilas = 9;
-	private int numColumnas = 9;
-	private int numMinas = 9;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Juego frame = new Juego();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Juego() {
-		cargarControles();
+	private int numFilas;
+	private int numColumnas;
+	private int numMinas;
+	
+	public Juego(int width, int height, int numFilas, int numColumnas, int numMinas) {
+		this.numFilas = numFilas;
+		this.numColumnas = numColumnas;
+		this.numMinas = numMinas;
+		
+		cargarControles(width, height);
 		iniciarPartida();
+	}
+	
+	public void run() {
+		setVisible(true);
 	}
 	
 	private void iniciarPartida() {
@@ -75,11 +65,19 @@ public class Juego extends JFrame {
 		reiniciarTablero();
 	}
 	
-	private void cargarControles() {
+	private void cargarControles(int width, int height) {
+		int cabeceraWidth = width - 16;
+		int cabeceraHeight = (height - 39) * 15 / 100;
+		
+		int dosPorciento = (width - 16) * 2 / 100;
+		int tableroWidth = (width - 16) - dosPorciento * 2;
+		int tableroHeight = (height - 39) * 84 / 100;
+		int tableroY = cabeceraHeight;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Buscaminas de la Hello Kitty");
 		setIconImage(new ImageIcon("resources/hellokitty.png").getImage());
-		setBounds(100, 100, 450, 600);
+		setBounds(20, 20, width, height);
 		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -89,12 +87,12 @@ public class Juego extends JFrame {
 		
 		// Cabecera
 		cabecera = new JPanel();
-		cabecera.setBounds(10, 11, 414, 101);
+		cabecera.setBounds(0, 0, cabeceraWidth, cabeceraHeight);
+        cabecera.setLayout(null);
 		contentPane.add(cabecera);
-		cabecera.setLayout(null);
 		
 		mainButton = new JButton();
-		mainButton.setBounds(161, 23, 89, 55);
+        mainButton.setBounds(cabeceraWidth / 2 - 45, cabeceraHeight / 2 - 25, 90, 55);
 		mainButton.setText(null);  // No mostrar texto
 		mainButton.setBorderPainted(false);  // No mostrar borde
 		mainButton.setContentAreaFilled(false);  // No pintar el área de contenido
@@ -116,10 +114,14 @@ public class Juego extends JFrame {
 		cabecera.add(mainButton);
 		
 		// Tablero
+		tableroLayout = new JPanel();
+		tableroLayout.setLayout(new BoxLayout(tableroLayout, BoxLayout.Y_AXIS));
+		tableroLayout.setBounds(dosPorciento, tableroY, tableroWidth, tableroHeight);
+		contentPane.add(tableroLayout);
+		
 		tablero = new JPanel();
-		tablero.setBounds(10, 123, 414, 427);
-		contentPane.add(tablero);
-		tablero.setLayout(new GridLayout(9, 9, 0, 0));
+		tableroLayout.add(tablero);
+		tablero.setLayout(new GridLayout(numFilas, numColumnas, 0, 0));
 		
 		botonesTablero = new JButton[numFilas][numColumnas];
 		for(int i = 0; i < botonesTablero.length; i++) {

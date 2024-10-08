@@ -4,11 +4,11 @@ public class Pepe {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Frame ventana = new Frame();
+		Juego juego = new Juego(450, 600, 8, 8, 10);
+		// Juego juego = new Juego(800, 1000, 16, 16, 40);
+		// Juego juego = new Juego(1400, 1000, 16, 30, 99);
 		
-		System.out.println("Antes de sacar ventana");
-		ventana.run();
-		System.out.println("Despues de sacar ventana");
+		juego.run();
 	}
 
 }
