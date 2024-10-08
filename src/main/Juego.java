@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 
 public class Juego extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	private JPanel contentPane;
 	private JPanel cabecera;
 	private JPanel tableroLayout;
@@ -74,7 +74,7 @@ public class Juego extends JFrame {
 		int tableroHeight = (height - 39) * 84 / 100;
 		int tableroY = cabeceraHeight;
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setTitle("Buscaminas de la Hello Kitty");
 		setIconImage(new ImageIcon("resources/hellokitty.png").getImage());
 		setBounds(20, 20, width, height);
