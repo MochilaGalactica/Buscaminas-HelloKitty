@@ -37,7 +37,7 @@ public class MainMenu extends JFrame {
 	public MainMenu() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Buscaminas de la Hello Kitty");
-		setIconImage(new ImageIcon("resources/hellokitty.png").getImage());
+		setIconImage(new ImageIcon(getClass().getResource("/hellokitty.png")).getImage());
 		setResizable(false);
 		setBounds(100, 100, 650, 450);
 		contentPane = new JPanel();

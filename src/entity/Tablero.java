@@ -40,7 +40,6 @@ public class Tablero {
 			
 			if (!casilla.isMina()) {
 				casillas[posicionX][posicionY].colocarMina();
-				// System.out.println("Mina colocada en: " + posicionX + "," + posicionY);
 				minasColocadas++;
 			}
 		}

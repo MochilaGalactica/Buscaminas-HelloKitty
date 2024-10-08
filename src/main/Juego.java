@@ -35,10 +35,15 @@ public class Juego extends JFrame {
 	
 	private Tablero tableroMinas;
 	
+	private ImageIcon icono;
+	
 	private ImageIcon mainIconoNormal;
     private ImageIcon mainIconoHover;
     private ImageIcon mainIconoVictoria;
     private ImageIcon mainIconoGameOver;
+    
+    private ImageIcon corazonIcono;
+    private ImageIcon fresaIcono;
 	
 	private int numFilas;
 	private int numColumnas;
@@ -66,6 +71,16 @@ public class Juego extends JFrame {
 	}
 	
 	private void cargarControles(int width, int height) {
+		icono = new ImageIcon(getClass().getResource("/hellokitty.png"));
+		
+		mainIconoNormal = new ImageIcon(getClass().getResource("/hellokitty_mini.png"));
+		mainIconoHover = new ImageIcon(getClass().getResource("/hellokitty_hover.png"));
+		mainIconoGameOver = new ImageIcon(getClass().getResource("/hellokitty_muerta.png"));
+		mainIconoVictoria = new ImageIcon(getClass().getResource("/hellokitty_victoria.png"));
+		
+		corazonIcono = new ImageIcon(getClass().getResource("/corazon.png"));
+		fresaIcono = new ImageIcon(getClass().getResource("/fresa.png"));
+		
 		int cabeceraWidth = width - 16;
 		int cabeceraHeight = (height - 39) * 15 / 100;
 		
@@ -76,7 +91,7 @@ public class Juego extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setTitle("Buscaminas de la Hello Kitty");
-		setIconImage(new ImageIcon("resources/hellokitty.png").getImage());
+		setIconImage(icono.getImage());
 		setBounds(20, 20, width, height);
 		setResizable(false);
 		contentPane = new JPanel();
@@ -98,11 +113,6 @@ public class Juego extends JFrame {
 		mainButton.setContentAreaFilled(false);  // No pintar el área de contenido
 		mainButton.setFocusPainted(false);  // No mostrar el foco
 		mainButton.setOpaque(false);  // No hacer el botón opaco
-		
-		mainIconoNormal = new ImageIcon("resources/hellokitty_mini.png");
-		mainIconoHover = new ImageIcon("resources/hellokitty_hover.png");
-		mainIconoGameOver = new ImageIcon("resources/hellokitty_muerta.png");
-		mainIconoVictoria = new ImageIcon("resources/hellokitty_victoria.png");
 		
 		// Hacer click en el botón
 		mainButton.addActionListener(new ActionListener() {
@@ -134,7 +144,7 @@ public class Juego extends JFrame {
 	}
 	
 	private void reiniciarTablero() {
-		mainButton.setIcon(new ImageIcon("resources/hellokitty_mini.png"));
+		mainButton.setIcon(mainIconoNormal);
 		
 		// Agregar un MouseListener para cambiar el icono al pasar el ratón
 		mainButton.addMouseListener(new MouseAdapter() {
@@ -186,22 +196,23 @@ public class Juego extends JFrame {
 	}
 	
 	private void casillaClick(Casilla casilla) {
-		int x = casilla.getX();
-		int y = casilla.getY();
-		
-		JButton boton = botonesTablero[x][y];
-		boton.setEnabled(false);
-		
-		if(casilla.isMina()) {
-			boton.setBackground(new Color(255, 0, 0));
-			gameOver();
-		}else {
-			abrirCasillasAlrededor(casilla);
+		if(!casilla.isBandera()) {
+			int x = casilla.getX();
+			int y = casilla.getY();
 			
-			if(tableroMinas.checkVictoria()) {
-				victoria();
+			JButton boton = botonesTablero[x][y];
+			boton.setEnabled(false);
+			
+			if(casilla.isMina()) {
+				boton.setBackground(new Color(255, 0, 0));
+				gameOver();
+			}else {
+				abrirCasillasAlrededor(casilla);
+				
+				if(tableroMinas.checkVictoria()) {
+					victoria();
+				}
 			}
-			
 		}
 	}
 	
@@ -212,7 +223,7 @@ public class Juego extends JFrame {
 				botonesTablero[casilla.getX()][casilla.getY()].setIcon(null);
 			}else {
 				casilla.setBandera(true);
-				botonesTablero[casilla.getX()][casilla.getY()].setIcon(new ImageIcon("resources/corazon.png"));
+				botonesTablero[casilla.getX()][casilla.getY()].setIcon(corazonIcono);
 			}
 		}
 		
@@ -269,7 +280,7 @@ public class Juego extends JFrame {
 		for(int i = 0; i < botonesTablero.length; i++) {
 			for(int j = 0; j < botonesTablero[i].length; j++) {
 				if(tableroMinas.getCasillas()[i][j].isMina()) {
-					botonesTablero[i][j].setIcon(new ImageIcon("resources/fresa.png"));
+					botonesTablero[i][j].setIcon(fresaIcono);
 				}
 			}
 		}
