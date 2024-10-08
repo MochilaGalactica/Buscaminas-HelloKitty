@@ -43,6 +43,7 @@ public class Juego extends JFrame {
     private ImageIcon mainIconoGameOver;
     
     private ImageIcon corazonIcono;
+    private ImageIcon interroganteIcono;
     private ImageIcon fresaIcono;
 	
 	private int numFilas;
@@ -79,6 +80,7 @@ public class Juego extends JFrame {
 		mainIconoVictoria = new ImageIcon(getClass().getResource("/hellokitty_victoria.png"));
 		
 		corazonIcono = new ImageIcon(getClass().getResource("/corazon.png"));
+		interroganteIcono = new ImageIcon(getClass().getResource("/interrogante.png"));
 		fresaIcono = new ImageIcon(getClass().getResource("/fresa.png"));
 		
 		int cabeceraWidth = width - 16;
@@ -183,7 +185,7 @@ public class Juego extends JFrame {
 		            @Override
 		            public void mouseReleased(MouseEvent e) {
 		                if (e.getButton() == MouseEvent.BUTTON3) {
-		                    colocarBandera(casilla);
+		                	colocarBanderaInterrogante(casilla);
 		                }
 		            }
 		        });
@@ -196,7 +198,7 @@ public class Juego extends JFrame {
 	}
 	
 	private void casillaClick(Casilla casilla) {
-		if(!casilla.isBandera()) {
+		if(!casilla.isBandera() && !casilla.isInterrogante()) {
 			int x = casilla.getX();
 			int y = casilla.getY();
 			
@@ -216,11 +218,15 @@ public class Juego extends JFrame {
 		}
 	}
 	
-	private void colocarBandera(Casilla casilla) {
+	private void colocarBanderaInterrogante(Casilla casilla) {
 		if(!casilla.isAbierta()) {
-			if(casilla.isBandera()) {
-				casilla.setBandera(false);
+			if(casilla.isInterrogante()) {
+				casilla.setInterrogante(false);
 				botonesTablero[casilla.getX()][casilla.getY()].setIcon(null);
+			}else if(casilla.isBandera()) {
+				casilla.setBandera(false);
+				casilla.setInterrogante(true);
+				botonesTablero[casilla.getX()][casilla.getY()].setIcon(interroganteIcono);
 			}else {
 				casilla.setBandera(true);
 				botonesTablero[casilla.getX()][casilla.getY()].setIcon(corazonIcono);

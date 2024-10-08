@@ -8,6 +8,7 @@ public class Casilla {
 	private boolean mina;
 	private boolean abierta;
 	private boolean bandera;
+	private boolean interrogante;
 	
 	public Casilla(int x, int y) {
 		this.x = x;
@@ -15,6 +16,7 @@ public class Casilla {
 		this.mina = false;
 		this.abierta = false;
 		this.bandera = false;
+		this.interrogante = false;
 	}
 
 	public int getX() {
@@ -45,6 +47,10 @@ public class Casilla {
 		return bandera;
 	}
 	
+	public boolean isInterrogante() {
+		return interrogante;
+	}
+	
 	public void colocarMina() {
 		this.mina = true;
 	}
@@ -57,5 +63,7 @@ public class Casilla {
 		this.bandera = bandera;
 	}
 	
-	
+	public void setInterrogante(boolean interrogante) {
+		this.interrogante = interrogante;
+	}
 }
